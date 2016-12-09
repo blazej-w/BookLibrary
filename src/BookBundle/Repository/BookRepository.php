@@ -12,4 +12,27 @@ use Doctrine\ORM\EntityRepository;
  */
 class BookRepository extends EntityRepository
 {
+    public function findByGreaterRating($rating){
+        $em = $this->getEntityManager();
+        $query = $em->createQuery("SELECT books FROM BookBundle:Book books WHERE books.rating > :rating")
+            ->setParameter('rating', $rating);
+        $books = $query->getResult();
+        return $books;
+    }
+
+    public function findByGreaterID($id){
+        $em = $this->getEntityManager();
+        $query = $em->createQuery("SELECT books FROM BookBundle:Book books WHERE books.id > :id")
+            ->setParameter('id', $id);
+        $books = $query->getResult();
+        return $books;
+    }
+
+    public function findByTitleStart($titlestart){
+        $em = $this->getEntityManager();
+        $query = $em->createQuery("SELECT books FROM BookBundle:Book books WHERE books.title LIKE :like")
+            ->setParameter('like', "$titlestart%");
+        $books = $query->getResult();
+        return $books;
+    }
 }
