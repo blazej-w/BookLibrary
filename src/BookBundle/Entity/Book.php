@@ -12,6 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Book
 {
+    public function __toString()
+    {
+        return $this->title;
+    }
+
     /**
      * @var int
      *

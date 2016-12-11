@@ -1,11 +1,10 @@
 <?php
-
 namespace BookBundle\Controller;
-
 use BookBundle\Entity\Book;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Book controller.
@@ -23,14 +22,11 @@ class BookController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
         $books = $em->getRepository('BookBundle:Book')->findAll();
-
         return $this->render('book/index.html.twig', array(
             'books' => $books,
         ));
     }
-
     /**
      * Creates a new book entity.
      *
@@ -42,21 +38,17 @@ class BookController extends Controller
         $book = new Book();
         $form = $this->createForm('BookBundle\Form\BookType', $book);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($book);
             $em->flush($book);
-
             return $this->redirectToRoute('book_show', array('id' => $book->getId()));
         }
-
         return $this->render('book/new.html.twig', array(
             'book' => $book,
             'form' => $form->createView(),
         ));
     }
-
     /**
      * Finds and displays a book entity.
      *
@@ -66,13 +58,11 @@ class BookController extends Controller
     public function showAction(Book $book)
     {
         $deleteForm = $this->createDeleteForm($book);
-
         return $this->render('book/show.html.twig', array(
             'book' => $book,
             'delete_form' => $deleteForm->createView(),
         ));
     }
-
     /**
      * Displays a form to edit an existing book entity.
      *
@@ -84,20 +74,16 @@ class BookController extends Controller
         $deleteForm = $this->createDeleteForm($book);
         $editForm = $this->createForm('BookBundle\Form\BookType', $book);
         $editForm->handleRequest($request);
-
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
             return $this->redirectToRoute('book_edit', array('id' => $book->getId()));
         }
-
         return $this->render('book/edit.html.twig', array(
             'book' => $book,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }
-
     /**
      * Deletes a book entity.
      *
@@ -108,16 +94,13 @@ class BookController extends Controller
     {
         $form = $this->createDeleteForm($book);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($book);
             $em->flush($book);
         }
-
         return $this->redirectToRoute('book_index');
     }
-
     /**
      * Creates a form to delete a book entity.
      *
@@ -131,6 +114,39 @@ class BookController extends Controller
             ->setAction($this->generateUrl('book_delete', array('id' => $book->getId())))
             ->setMethod('DELETE')
             ->getForm()
-        ;
+            ;
+    }
+
+
+    /**
+     * @Route("/booksGreaterRating/{rating}")
+     * @Method("GET")
+     */
+    public function booksGreaterRatingAction($rating){
+        $em = $this->getDoctrine()->getManager();
+        $books = $em->getRepository('BookBundle:Book')->findByGreaterRating($rating);
+        return $this->render('book/showGreater.html.twig', array(
+            'books' => $books,
+        ));
+    }
+    /**
+     * @Route("/booksGreaterID/{id}")
+     */
+    public function booksGreaterIDAction($id){
+        $em = $this->getDoctrine()->getManager();
+        $books = $em->getRepository('BookBundle:Book')->findByGreaterID($id);
+        return $this->render('book/showGreater.html.twig', array(
+            'books' => $books,
+        ));
+    }
+    /**
+     * @Route("/booksTitleStart/{titlestart}")
+     */
+    public function booksTitleStartAction($titlestart){
+        $em = $this->getDoctrine()->getManager();
+        $books = $em->getRepository('BookBundle:Book')->findByTitleStart($titlestart);
+        return $this->render('book/showGreater.html.twig', array(
+            'books' => $books,
+        ));
     }
 }

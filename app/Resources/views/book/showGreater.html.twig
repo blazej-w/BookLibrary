@@ -1,8 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Books list</h1>
-
+    <h1>Books</h1>
     <table class="table-condensed">
         <thead>
             <tr>
@@ -13,7 +12,7 @@
                 <th>Actions</th>
             </tr>
         </thead>
-        <tbody>
+            <tbody>
         {% for book in books %}
             <tr>
                 <td><a href="{{ path('book_show', { 'id': book.id }) }}">{{ book.id }}</a></td>
@@ -32,17 +31,16 @@
                 </td>
             </tr>
         {% endfor %}
-        </tbody>
+            </tbody>
     </table>
 
     <ul>
         <li>
-            <a href="{{ path('book_new') }}">Add a new book</a>
+            <a href="{{ path('book_index') }}">Back to the list</a>
         </li>
     </ul>
-    <ul>
-        <li>
-            <a href="{{ path('author_new') }}">Add a new author</a>
-        </li>
-    </ul>
+
 {% endblock %}
+
+
+
